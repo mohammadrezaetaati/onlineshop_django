@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+  django_web:
+    build: .
+    command: >
+      ash -c "python manage.py migrate && python manage.py runserver && gunicorn OnlineShop.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static:/app/static
+      - media:/app/media
+      - .:/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/app/static
+      - media:/app/media
+    ports:
+      - 8082:80
+    depends_on:
+      - django_web
+  redis:
+    image: redis:slim-buster
+  celery:
+    restart: always
+    build:
+      context: .
+#      dockerfile: dokckerfile-name-alternative
+#      args:
+#        name : gomnam
+    command: >
+      ash -c "touch celery.log && touch celery_beat.log && celery -A OnlineShop worker -l info &> celery.log & celery -A OnlineShop beat -l info -S django &> celery_beat.log"
+    volumes:
+      - .:/app
+    depends_on:
+      - django_web
+      - redis
+volumes:
+  static:
+  media:
+
