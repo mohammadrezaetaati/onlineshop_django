@@ -1,4 +1,3 @@
-from multiprocessing import context
 import random
 
 from django.shortcuts import redirect, render
@@ -8,9 +7,10 @@ from django.views.generic import CreateView
 from django.core.cache import cache
 from django.db import transaction
 
-from .form import CustomerCreationForm,SupplierCreationForm,SendSmsForm,LoginReceivedCodeForm,SendEmailForm,RegisterForm\
+from .form import CustomerCreationForm,SupplierCreationForm,\
+    SendSmsForm,LoginReceivedCodeForm,SendEmailForm,RegisterForm\
     ,ProfileForm,ChangePasswordForm
-from . models import Customer, Supplier, User
+from .models import Customer, Supplier, User
 from .tasks import send_email,sendsms
 
 
@@ -35,7 +35,8 @@ class Register(View):
         form=RegisterForm(request.POST)
         if form.is_valid():
             with transaction.atomic():
-                user=User.objects.create(phone_number=request.session.get('phonenumber'),email=request.session.get('email'))
+                user=User.objects.create(phone_number=request.session.\
+                    get('phonenumber'),email=request.session.get('email'))
                 user.set_password(form.cleaned_data["password1"])
                 if form.cleaned_data.get('status')=='customer':
                     user.is_customer=True
@@ -47,26 +48,6 @@ class Register(View):
                 return redirect('/')
         return render(request,'register.html',context={'form':form})
     
-    
-        
-        
-
-    # if request.method=='POST':
-    #     username=request.POST['username']
-    #     password = request.POST['password']
-    #     user = authenticate(request, username=username, password=password)
-    #     if user: 
-    #         login(request, user)
-    #         return redirect('/')
-       
-    #     else:
-    #         context={
-    #             'error':user
-    #         }
-    #         print(user)
-    #         return render(request,'login2.html',context)
-    # return render(request,'login2.html')
-
 
 class RegisterCstomer(CreateView):
 

@@ -1,6 +1,8 @@
 from django.contrib import admin
 from User.models import Customer,Supplier
-from Shopping.models import Product,Category,Brands,Feature,FeatureKey,Comment,Discount, ProductFeature,OrderItem,Order,Address
+from Shopping.models import Product,Category,\
+    Brands,Feature,FeatureKey,Comment,\
+    Discount, ProductFeature,OrderItem,Order,Address
 
 class ProductFeatureInline(admin.StackedInline):
     model = ProductFeature

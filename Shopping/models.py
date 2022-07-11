@@ -1,11 +1,14 @@
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 
 from User.models import Customer,Supplier
 
-from django.core.validators import MaxValueValidator, MinValueValidator
 
-from django.conf import settings
+
+
 
 
 
@@ -56,7 +59,7 @@ class ProductFeature(models.Model):
     product = models.ForeignKey("Product", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.product.name}-{self.feature.key}"
+        return f"{self.product.name}-{self.feature.value}"
 
 
 class Brands(models.Model):
@@ -129,36 +132,6 @@ class Address(models.Model):
 
     class Meta:
         verbose_name_plural = 'Addresses'
-# class CartItem(models.Model):
-
-#     count_order=models.IntegerField()
-#     created_at=models.DateTimeField()
-#     product_id=models.ForeignKey(Product ,on_delete=models.CASCADE)
-#     session_id=models.ForeignKey("ShopSession", on_delete=models.CASCADE)
-#     price=models.IntegerField()
-#     ordered = models.BooleanField(default=False)
-#     def get_total_item_price(self):
-#         return self.quantity * self.item.price
-
-#     def get_total_discount_item_price(self):
-#         return self.quantity * self.item.discount_price
-
-#     def get_amount_saved(self):
-#         return self.get_total_item_price() - self.get_total_discount_item_price()
-
-#     def get_final_price(self):
-#         if self.item.discount_price:
-#             return self.get_total_discount_item_price()
-#         return self.get_total_item_price()
-
-# class ShopSession(models.Model):
-#     # customer_id=models.ForeignKey(Customer, on_delete=models.RESTRICT)
-#     created_at=models.DateTimeField(auto_now_add=True)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-#                              on_delete=models.CASCADE)
-#     ordered = models.BooleanField(default=False)
-
-
 
 class Comment(models.Model):
     customer_id=models.ForeignKey(Customer,on_delete=models.RESTRICT)

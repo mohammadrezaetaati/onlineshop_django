@@ -1,10 +1,9 @@
-from crypt import methods
+
 from itertools import product
 from unicodedata import category
 from django import views
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse,JsonResponse
-from .models import Category, Product,OrderItem,Order
 from django.views import View
 from django.contrib import messages
 from django.utils import timezone
@@ -13,8 +12,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import ListView, DetailView, View
 
-from .forms import SearchProductForm
+from User.models import User,Customer
 
+from .forms import SearchProductForm,CommentsForm
+from .models import Category, Product,OrderItem,Order,Comment
 
 class ProductShow(View):
     def get(self,request):
@@ -29,16 +30,33 @@ class ProductShow(View):
 
 class Details(View):
     def get(self,request,id):
-        product=get_object_or_404(Product,id=id)
+        product:Product=get_object_or_404(Product,id=id)
+       
+        # colors=product.feature.values_list('value')
+        # print(product.feature.values_list())
+
         # photos:str=Product.objects.values_list('img1','img2','img3','img4','img5','img6')[1]
 
         context={
             'product':product,
+            # 'colors':colors
+
             # 'photos':photos,
             }
         return render(request,'product-default.html',context)
 
-
+class Comments(View):
+    def post(self,request):
+        form=CommentsForm(request.POST)
+        if form.is_valid():
+            comment=form.cleaned_data.get('comment')
+            product=request.POST['product']
+            votes=form.cleaned_data.get('rating')
+            user=Customer.objects.get(user=request.user)
+            print(product,'fffffffffffffffffffffffffff')
+            Comment.objects.create(customer_id=user,product_id_id=product,comment_txt=comment,votes=votes)
+            return render(reverse('project.views.detail', instance.id))
+        # print(request.POST['comment'])
 class SearchProduct(View):
 
     def post(self,request):
@@ -80,7 +98,7 @@ def cart_view(request):
 
 @login_required
 def add_to_cart(request, id):
-    item = get_object_or_404(Product, id=id)
+    item:Product = get_object_or_404(Product, id=id)
     order_item, created = OrderItem.objects.get_or_create(
         item=item,
         user=request.user,

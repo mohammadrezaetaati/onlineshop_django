@@ -188,8 +188,10 @@
 
                                         <div class="product-form product-variation-form product-color-swatch">
                                             <label>رنگ :</label>
+                                            
                                             <div class="d-flex align-items-center product-variations">
-                                                <a href="#" class="color" style="background-color: #ffcc01"></a>
+                                               
+                                                <a href="#" class="color" style="background-color: red"> </a>
                                                 <a href="#" class="color" style="background-color: #ca6d00;"></a>
                                                 <a href="#" class="color" style="background-color: #1c93cb;"></a>
                                                 <a href="#" class="color" style="background-color: #ccc;"></a>
@@ -239,67 +241,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="frequently-bought-together mt-5">
-                                <h2 class="title title-underline">اغلب خریداری شده است  </h2>
-                                <div class="bought-together-products row mt-8 pb-4">
-                                    <div class="product product-wrap text-center">
-                                        <figure class="product-media">
-                                            <img src="{% static 'assets/images/products/default/bought-1.jpg'%}" alt="Product"
-                                                width="138" height="138" />
-                                            <div class="product-checkbox">
-                                                <input type="checkbox" class="custom-checkbox" id="product_check1"
-                                                    name="product_check1">
-                                                <label></label>
-                                            </div>
-                                        </figure>
-                                        <div class="product-details">
-                                            <h4 class="product-name">
-                                                <a href="#">ساعت مچی مشکی الکترونیکی</a>
-                                            </h4>
-                                            <div class="product-price">{{product.price}} تومان </div>
-                                        </div>
-                                    </div>
-                                    <div class="product product-wrap text-center">
-                                        <figure class="product-media">
-                                            <img src="{% static 'assets/images/products/default/bought-2.jpg'%}" alt="Product"
-                                                width="138" height="138" />
-                                            <div class="product-checkbox">
-                                                <input type="checkbox" class="custom-checkbox" id="product_check2"
-                                                    name="product_check2">
-                                                <label></label>
-                                            </div>
-                                        </figure>
-                                        <div class="product-details">
-                                            <h4 class="product-name">
-                                                <a href="#">لپ تاپ اپل </a>
-                                            </h4>
-                                            <div class="product-price">18000000 تومان</div>
-                                        </div>
-                                    </div>
-                                    <div class="product product-wrap text-center">
-                                        <figure class="product-media">
-                                            <img src="{% static 'assets/images/products/default/bought-3.jpg'%}" alt="Product"
-                                                width="138" height="138" />
-                                            <div class="product-checkbox">
-                                                <input type="checkbox" class="custom-checkbox" id="product_check3"
-                                                    name="product_check3">
-                                                <label></label>
-                                            </div>
-                                        </figure>
-                                        <div class="product-details">
-                                            <h4 class="product-name">
-                                                <a href="#">هدفون لنوو سفید </a>
-                                            </h4>
-                                            <div class="product-price">39000 تومان</div>
-                                        </div>
-                                    </div>
-                                    <div class="product-button">
-                                        <div class="bought-price font-weight-bolder text-primary ls-50">48000000 تومان</div>
-                                        <div class="bought-count">برای 3 مورد</div>
-                                        <a href="{% url 'add-to-cart' product.id %}" class="btn btn-dark btn-rounded">افزودن به سبد</a>
-                                    </div>
-                                </div>
-                            </div>
+                        
                             <div class="tab tab-nav-boxed tab-nav-underline product-tabs">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
@@ -434,84 +376,9 @@
                                             <div class="col-xl-4 col-lg-5 mb-4">
                                                 <div class="ratings-wrapper">
                                                     <div class="avg-rating-container">
-                                                        <h4 class="avg-mark font-weight-bolder ls-50">3.3</h4>
+                                                 
                                                         <div class="avg-rating">
-                                                            <p class="text-dark mb-1">میانگین امتیاز </p>
-                                                            <div class="ratings-container">
-                                                                <div class="ratings-full">
-                                                                    <span class="ratings" style="width: 60%;"></span>
-                                                                    <span class="tooltiptext tooltip-top"></span>
-                                                                </div>
-                                                                <a href="#" class="rating-reviews">(3 نظر )</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        class="ratings-value d-flex align-items-center text-dark ls-25">
-                                                        <span
-                                                            class="text-dark font-weight-bold">66.7%</span>توصیه شده <span
-                                                            class="count">(2 از 3)</span>
-                                                    </div>
-                                                    <div class="ratings-list">
-                                                        <div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 100%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <div class="progress-bar progress-bar-sm ">
-                                                                <span></span>
-                                                            </div>
-                                                            <div class="progress-value">
-                                                                <mark>70%</mark>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 80%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <div class="progress-bar progress-bar-sm ">
-                                                                <span></span>
-                                                            </div>
-                                                            <div class="progress-value">
-                                                                <mark>30%</mark>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 60%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <div class="progress-bar progress-bar-sm ">
-                                                                <span></span>
-                                                            </div>
-                                                            <div class="progress-value">
-                                                                <mark>40%</mark>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 40%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <div class="progress-bar progress-bar-sm ">
-                                                                <span></span>
-                                                            </div>
-                                                            <div class="progress-value">
-                                                                <mark>0%</mark>
-                                                            </div>
-                                                        </div>
-                                                        <div class="ratings-container">
-                                                            <div class="ratings-full">
-                                                                <span class="ratings" style="width: 20%;"></span>
-                                                                <span class="tooltiptext tooltip-top"></span>
-                                                            </div>
-                                                            <div class="progress-bar progress-bar-sm ">
-                                                                <span></span>
-                                                            </div>
-                                                            <div class="progress-value">
-                                                                <mark>0%</mark>
-                                                            </div>
+                        
                                                         </div>
                                                     </div>
                                                 </div>
@@ -519,8 +386,9 @@
                                             <div class="col-xl-8 col-lg-7 mb-4">
                                                 <div class="review-form-wrapper">
                                                     <h3 class="title tab-pane-title font-weight-bold mb-1">نظر خود را ارسال کنید</h3>
-                                                    <p class="mb-3">آدرس ایمیل شما منتشر نخواهد شد. فیلدهای الزامی مشخص شده اند *</p>
-                                                    <form action="#" method="POST" class="review-form">
+                                                   
+                                                    <form action="{%url 'comment'%}" method="POST" class="review-form">
+                                                    {% csrf_token %}
                                                         <div class="rating-form">
                                                             <label for="rating">امتیاز شما به این محصول :</label>
                                                             <span class="rating-stars">
@@ -539,27 +407,20 @@
                                                                 <option value="2">بد نیست</option>
                                                                 <option value="1">خیلی بد</option>
                                                             </select>
-                                                        </div>
-                                                        <textarea cols="30" rows="6"
+                                                        </div> 
+                                                        
+                                                        <input type="hidden" name="product" value={{product.id}}>
+                                                        <textarea cols="30" rows="6" name='comment'
                                                             placeholder="نظر خود را اینجا بنویسید..." class="form-control"
                                                             id="review"></textarea>
-                                                        <div class="row gutter-md">
-                                                            <div class="col-md-6">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="نام شما" id="author">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <input type="text" class="form-control"
-                                                                    placeholder="ایمیل شما" id="email_1">
-                                                            </div>
+                                                            <button type="submit" class="btn btn-dark">ارسال نظر</button>
+                                                            </form>
+                                                        <div class="row gutter-md">                  
                                                         </div>
                                                         <div class="form-group">
                                                             <input type="checkbox" class="custom-checkbox"
                                                                 id="save-checkbox">
-                                                            <label for="save-checkbox">برای دفعه بعد که نظر می دهم نام، ایمیل و وب سایت من را در این مرورگر ذخیره کنید.</label>
                                                         </div>
-                                                        <button type="submit" class="btn btn-dark">ارسال نظر</button>
-                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
