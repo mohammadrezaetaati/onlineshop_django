@@ -1,0 +1,146 @@
+{% extends 'shared/_MainLayout.html' %}
+
+{% block content %}
+    <section id="cart_items">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="/">خانـه</a></li>
+                    <li class="active">لیست محصولات موجود در سبد خرید شما</li>
+                </ol>
+            </div><!--/breadcrums-->
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if cart_items|length > 0 %}
+                <div class="table-responsive cart_info">
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr class="cart_menu">
+                            <td class="image">کـالا</td>
+                            <td class="description"></td>
+                            <td class="supplier">فروشنده</td>
+                            <td class="price">قیمت واحد</td>
+                            <td class="quantity">تعـداد</td>
+                            <td class="total">مجمـوع</td>
+                            <td class="remove">حذف کالا از سبد</td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <form method="post" action="{% url 'edit_user_cart' %}">
+                                {% csrf_token %}
+                                {% for item in cart_items %}
+                                    <tr>
+                                        <td class="cart_product">
+                                            <a href="{% url 'product_detail' item.sup_pr_detail_id.sup_pr_item_id.product.id item.sup_pr_detail_id.sup_pr_item_id.product.slug %}"><img src="{{ item.sup_pr_detail_id.sup_pr_item_id.product.image.url }}" alt=""
+                                                            style="width: 110px;height: 110px; margin-left: 25px;"></a>
+                                        </td>
+                                        <td class="cart_description">
+                                            <h4><a href="{% url 'product_detail' item.sup_pr_detail_id.sup_pr_item_id.product.id item.sup_pr_detail_id.sup_pr_item_id.product.slug %}">{{ item.sup_pr_detail_id.sup_pr_item_id.product.name }}</a></h4>
+                                            <p>شناسـه : {{ item.sup_pr_detail_id.sup_pr_item_id.product.id }}</p>
+                                            {% for elm in item.sup_pr_detail_id.productspecialfeature_set.all %}
+                                                    <label>{{ elm.spe_feature_key }} : {{ elm.spe_feature_value }} </label>
+                                            {% endfor %}
+                                        </td>
+                                        <td class="cart_description">
+                                            <p>{{ item.sup_pr_detail_id.sup_pr_item_id.supplier }}</p>
+                                        </td>
+                                        <td class="cart_price">
+                                            <p>{{ item.sup_pr_detail_id.price_per_unit }} تومان</p>
+                                        </td>
+                                        <td class="cart_quantity">
+                                            <div class="cart_quantity_button">
+                                                <input type="number" name="{{item.id}}" value="{{ item.product_count }}" min="1" max="{{item.sup_pr_detail_id.available_quantity}}" style="width: 25%;">
+                                                <!-- <span>{{ item.product_count }}</span> -->
+                                            </div>
+                                        </td>
+                                        <td class="cart_total">
+                                            <p class="cart_total_price">{{ item.get_item_price }} تومان</p>
+                                        </td>
+                                        <td class="cart_delete">
+                                            <a class="cart_quantity_delete" style="margin-right: 50px;" href="{% url 'remove_from_user_cart' item.id %}"><i
+                                                    class="fa fa-times"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <button type="submit" class="btn btn-fefault cart">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    اعمال تغییرات تعداد کالاهای سبد
+                                    </button>
+                                </tr>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <p>هیچ محصولی در سبد خرید شما یافت نشد</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="do_action">
+        <div class="container">
+            {% if cart %}
+            <div class="heading">
+                <h3> انتخاب آدرس و نحوه ارسال این سبد خرید </h3>
+                <p style="color: red;">
+                    انتخاب و ثبت این فیلدها الزامی میباشد. بعد از ثبت آدرس و نحوه ارسال سفارش، هزینه حمل و نقل و مجموع قیمت سفارش محاسبه میشود و میتوانید خرید خود را نهایی کنید. با احترام هزینه حمل و نقل برای سفارش های بالای 500 هزارتومان رایگان میباشد.
+                </p>
+                <form method="post" action="{% url 'set_shipping_address' %}">
+                    {% csrf_token %}
+                    <label> آدرس ارسال سفارش </label>
+                    <select name="delivery_address">
+                        {% for address in customer_addresses %}
+                            <option value="{{address.id}}" >{{address.postal_address}}</option>
+                        {% endfor %}
+                    </select>
+                    <br></br>
+                    <label> نحوه ارسال سفارش </label>
+                    <select name="delivery_type">
+                        {% for type in delivery_types %}
+                            <option value="{{type.id}}" >{{type.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <br></br>
+                    <input type="hidden" name="cart_id" value="{{cart.id}}">
+                    <button type="submit" class="btn btn-default"> ثبت مشخصات ارسال سفارش </button>
+                </form>
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="total_area">
+                        <ul>
+                            <li>مجمـوع سبـد خریـد <span>{{ cart.cart_products_price }} تومان</span></li>
+                            <li>هزینـه حمل و نقـل 
+                                {% if cart.cart_shippment_price is not None %}
+                                    {% if cart.cart_shippment_price == 0 %}
+                                        <span>رایگان</span>
+                                    {% else %} 
+                                        <span>{{ cart.cart_shippment_price }} تومان</span>
+                                    {% endif %} 
+                                {% endif %}
+                            </li>
+                            <li>مجمـوع 
+                                {% if cart.cart_total_price %}    
+                                    <span>{{ cart.cart_total_price }} تومان</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                        {% if cart.cart_total_price %}
+                            <a class="btn btn-default check_out" href="{% url 'cart_checkout' %}">تایید نهایی سفارش و پرداخت</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

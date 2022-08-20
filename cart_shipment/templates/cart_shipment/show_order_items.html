@@ -1,0 +1,140 @@
+{% extends 'shared/_MainLayout.html' %}
+
+{% block content %}
+    <section id="cart_items">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="/">خانـه</a></li>
+                    <li class="active">جزئیات سفارش شما</li>
+                </ol>
+            </div>
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div style="border: 2px solid orange; margin-bottom:10px; padding:10px">
+                <h3>شناسه سفارش: {{order.id}}</h3>
+                <h4>تاریخ و زمان ثبت: {{order.generate_date_time}}</h4>
+                <h4>مبلغ کل محصولات: {{order.products_price}} تومان</h4>
+                <h4>تخفیف: {{order.discount}} تومان</h4>
+                {% if order.delivery_cost == 0 %}
+                    <h4>هزینه ارسال: رایگان</h4>
+                {% else %}
+                    <h4>هزینه ارسال: {{order.delivery_cost}} تومان</h4>
+                {% endif %}
+                <h4>مبلغ کل سفارش: {{order.total_price}} تومان</h4>
+                <h4>وضعیت سفارش: {{order_last_state.catalogue_id}} ({{order_last_state.date_time}})</h4>
+                {% if order_last_state.catalogue_id_id == 1 %}
+                    <a class="btn" href="{% url 'new_order_payment' order.id 1 %}" style="color: rgb(23, 179, 23);border:1px solid rgb(23, 179, 23)">پرداخت بانکی</a>
+                    <a class="btn" href="{% url 'cancel_order' order.id %}" style="color: red; border: 1px solid red; margin-right: 10px;">لغو سفارش</a>
+                {% endif %}
+                {% if order_last_state.catalogue_id_id != 6 %}
+                    <hr style="border-width: 1px;border-color: black;">
+                    <h4>نحوه ارسال سفارش: {{order.delivery_type_id}}</h4>
+                    <h4>آدرس ارسال سفارش: {{order.delivery_address.postal_address}}</h4>
+                    <h4>کد پستی: {{order.delivery_address.postal_code}}</h4>
+                {% endif %}
+            </div>
+            <h3>لیست محصولات سفارش</h3>
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr class="cart_menu">
+                            <td class="image">کـالا</td>
+                            <td class="description"></td>
+                            <td class="supplier">فروشنده</td>
+                            <td class="price">قیمت واحد</td>
+                            <td class="quantity">تعـداد</td>
+                            <td class="total">مجمـوع</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                            <tr>
+                                <td class="cart_product">
+                                    <a href="{% url 'product_detail' item.sup_pr_detail.sup_pr_item_id.product.id item.sup_pr_detail.sup_pr_item_id.product.slug %}"><img src="{{ item.sup_pr_detail.sup_pr_item_id.product.image.url }}" alt=""
+                                                    style="width: 110px;height: 110px; margin-left: 25px;"></a>
+                                </td>
+                                <td class="cart_description">
+                                    <h4><a href="{% url 'product_detail' item.sup_pr_detail.sup_pr_item_id.product.id item.sup_pr_detail.sup_pr_item_id.product.slug %}">{{ item.sup_pr_detail.sup_pr_item_id.product.name }}</a></h4>
+                                    <p>شناسـه : {{ item.sup_pr_detail.sup_pr_item_id.product.id }}</p>
+                                    {% for elm in item.sup_pr_detail.productspecialfeature_set.all %}
+                                            <label>{{ elm.spe_feature_key }} : {{ elm.spe_feature_value }} </label>
+                                    {% endfor %}
+                                </td>
+                                <td class="cart_description">
+                                    <p style="text-align: center;">{{ item.supplier }}</p>
+                                </td>
+                                <td class="cart_price">
+                                    <p style="text-align: center;">{{ item.price_per_unit }} تومان</p>
+                                </td>
+                                <td class="cart_quantity">
+                                    <div class="cart_quantity_button">
+                                        <p style="text-align: center;">{{ item.product_count }}</p>
+                                    </div>
+                                </td>
+                                <td class="cart_total">
+                                    <p class="cart_total_price" style="text-align: center;">{{ item.get_item_price }} تومان</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <h3>لیست پرداخت های مرتبط این سفارش</h3>
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr class="cart_menu">
+                            <td class="description">تاریخ و زمان</td>
+                            <td class="description">مبلغ</td>
+                            <td class="description">شماره کارت</td>
+                            <td class="description">وضعیت</td>
+                            <td class="description">شماره پیگیری بانکی</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in payment_records %}
+                            <tr>
+                                <td class="cart_description">
+                                    <p style="text-align: center;">{{record.date_time}}</p>
+                                </td>
+                                <td class="cart_description">
+                                    <p style="text-align: center;">{{record.amount}}</p>
+                                </td>
+                                <td class="cart_description">
+                                    <p style="text-align: center;">{{record.card_no}}</p>
+                                </td>
+                                <td class="cart_description">
+                                    {% if record.status == '2' %}
+                                        <p style="text-align: center;">تراکنش ناموفق</p>
+                                    {% elif record.status == '3' %}
+                                        <p style="text-align: center;">خطا رخ داده است</p>
+                                    {% elif record.status == '6' %}
+                                        <p style="text-align: center;">برگشت خورده سیستمی</p>
+                                    {% elif record.status == '7' %}
+                                        <p style="text-align: center;">لغو تراکنش</p>
+                                    {% elif record.status == '100' %}
+                                        <p style="text-align: center;">تایید تراکنش</p>
+                                    {% endif %}
+                                </td>
+                                <td class="cart_description">
+                                    {% if record.bank_track_id != None %}
+                                        <p style="text-align: center;">{{record.bank_track_id}}</p>
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock %}

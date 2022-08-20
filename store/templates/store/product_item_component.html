@@ -1,0 +1,22 @@
+<div class="col-sm-4 pull-right" >
+    <div class="product-image-wrapper" style="border: solid orange 1px;">
+        <div class="single-products">
+            <div class="productinfo text-center">
+                <img src="{{ product.image.url }}" alt="">
+                {% if product.pr_min_price %}
+                    <h2>{{ product.pr_min_price }} تومان</h2>
+                {% else %}
+                    <h2>ناموجود</h2>
+                {% endif %}
+                <p>{{ product.name }}</p>
+
+            </div>
+        </div>
+        <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+                <li><a href="{% url 'product_detail' product.id product.slug %}"><i class="fa fa-plus-square"></i>جزئیات محصول</a></li>
+                <li><a href=""><i class="fa fa-plus-square"></i>مقایسه</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

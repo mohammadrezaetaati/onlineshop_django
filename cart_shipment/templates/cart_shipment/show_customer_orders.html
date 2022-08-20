@@ -1,0 +1,74 @@
+{% extends 'shared/_MainLayout.html' %}
+
+{% block content %}
+    <section id="cart_items">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="/">خانـه</a></li>
+                    <li class="active">لیست سفارش های شما</li>
+                </ol>
+            </div><!--/breadcrums-->
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if orders|length > 0 %}
+                <div class="table-responsive cart_info">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr class="cart_menu">
+                                <td class="description">ردیف</td>
+                                <td class="description">شناسه سفارش</td>
+                                <td class="description">تاریخ و زمان ثبت</td>
+                                <td class="quantity">مجموع تعـداد اقلام</td>
+                                <td class="total">مبلغ</td>
+                                <td class="description">وضعیت</td>
+                                <td class="remove">عملیات</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td class="cart_description">
+                                        <p style="text-align: center;">{{ order.num }}</p>
+                                    </td>
+                                    <td class="cart_description">
+                                        <p style="text-align: center;">{{ order.id }}</p>
+                                    </td>
+                                    <td class="cart_description">
+                                        <p>{{ order.generate_date_time }}</p>
+                                    </td>
+                                    <td class="cart_quantity">
+                                        <p style="text-align: center;">{{ order.total_products }}</p>
+                                    </td>
+                                    <td class="cart_total">
+                                        <p class="cart_total_price" style="text-align: center;">{{ order.total_price }} تومان</p>
+                                    </td>
+                                    <td class="cart_quantity">
+                                        <p style="text-align: center;">{{ order.last_state }}</p>
+                                    </td>
+                                    <td >
+                                        <a class="btn" href="{% url 'show_order_items' order.id %}">مشاهده جزئیات</a>
+                                        {% if order.last_state.id == 1 %}
+                                            <a class="btn" href="{% url 'new_order_payment' order.id 1 %}" style="color: rgb(23, 179, 23);">پرداخت بانکی</a>
+                                            <a class="btn" href="{% url 'cancel_order' order.id %}" style="color: red;">لغو سفارش</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <p>شما هنوز هیچ سفارشی را ثبت نکرده اید</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
